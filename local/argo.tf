@@ -64,5 +64,6 @@ resource "helm_release" "argocd-apps" {
   depends_on = [
     helm_release.argo-cd,
     kubernetes_manifest.argocd-github-access,
+    null_resource.middleware,
   ]
 }
