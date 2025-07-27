@@ -86,6 +86,22 @@ resource "helm_release" "istiod" {
   ]
 }
 
+resource "helm_release" "istio-gateway" {
+  name = "istio-gateway"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart = "argocd-apps"
+  version = "2.0.2"
+  namespace = "argocd"
+
+  values = [
+    file("../values/local/argocd/argocd_apps_istio_gateway_values.yaml")
+  ]
+
+  depends_on = [
+    helm_release.istiod,
+  ]
+}
+
 resource "helm_release" "argocd-apps" {
   name = "argocd-apps"
   repository = "https://argoproj.github.io/argo-helm"
