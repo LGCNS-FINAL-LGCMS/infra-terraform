@@ -71,3 +71,33 @@ variable "eks_instance_types" {
     "t4g.medium"
   ] # t4g.xlarge
 }
+
+variable "rds_instance_class" {
+  description = "RDS instance Class"
+  type = string
+  default = "db.t4g.micro" # db.m6g.large
+}
+
+variable "rds_allocated_storage" {
+  description = "RDS Allocated Storage"
+  type = number
+  default = 20
+}
+
+variable "db_name" {
+  description = "Database name"
+  type = string
+  default = "lgcms"
+}
+
+variable "db_username" {
+  description = "Database username"
+  type = string
+  default = "lgcms"
+}
+
+variable "db_password" {
+  description = "Database password"
+  type = string
+  default = "lgcms-1234"
+}
