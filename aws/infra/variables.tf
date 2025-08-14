@@ -27,3 +27,9 @@ variable "private_subnet_cidrs" {
   type = list(string)
   default = ["10.1.2.0/24", "10.1.3.0/24", "10.1.4.0/24"]
 }
+
+variable "allowed_ssh_cidr" {
+  description = "CIDR block allowed for SSH access"
+  type = string
+  default = "0.0.0.0/0"
+}
