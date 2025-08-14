@@ -101,3 +101,9 @@ variable "db_password" {
   type = string
   default = "lgcms-1234"
 }
+
+variable "cache_node_type" {
+  description = "Cache Node Type"
+  type = string
+  default = "cache.t4g.micro"
+}
