@@ -63,3 +63,11 @@ variable "key_name" {
   type = string
   default = "lgcms-keypair"
 }
+
+variable "eks_instance_types" {
+  description = "EKS Worker Nodes instance types"
+  type = list(string)
+  default = [
+    "t4g.medium"
+  ] # t4g.xlarge
+}
