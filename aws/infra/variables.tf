@@ -33,3 +33,33 @@ variable "allowed_ssh_cidr" {
   type = string
   default = "0.0.0.0/0"
 }
+
+variable "ubuntu_ami_id" {
+  description = "EC2 Ubuntu AMI"
+  type = string
+  default = "ami-09ed9bca6a01cd74a" # 64비트 ARM Ubuntu 24.04 LTS
+}
+
+variable "bastion_instance_type" {
+  description = "EC2 bastion server instance type"
+  type = string
+  default = "t4g.nano"
+}
+
+variable "kafka_instance_type" {
+  description = "EC2 bastion server instance type"
+  type = string
+  default = "t4g.nano"
+}
+
+variable "jenkins_instance_type" {
+  description = "EC2 bastion server instance type"
+  type = string
+  default = "t4g.nano"
+}
+
+variable "key_name" {
+  description = "Ket pair name for EC2 instances"
+  type = string
+  default = "lgcms-keypair"
+}
