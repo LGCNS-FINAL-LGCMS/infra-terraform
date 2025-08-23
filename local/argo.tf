@@ -19,10 +19,29 @@ resource "kubernetes_namespace" "backend" {
     }
 
     labels = {
-      "argocd.argoproj.io/managed-by" = "argocd"
+      "argocd.argoproj.io/managed-by" = "argocd",
+      "istio-injection" = "enabled"
     }
 
     name = "backend"
+  }
+
+  depends_on = [
+    helm_release.istiod
+  ]
+}
+
+resource "kubernetes_namespace" "istio-system" {
+  metadata {
+    annotations = {
+      name = "istio-system"
+    }
+
+    labels = {
+      "argocd.argoproj.io/managed-by" = "argocd"
+    }
+
+    name = "istio-system"
   }
 }
 
@@ -45,8 +64,41 @@ resource "helm_release" "argo-cd" {
 resource "kubernetes_manifest" "argocd-github-access" {
   manifest = yamldecode(file("../values/local/argocd/argocd_github_secret.yaml"))
   depends_on = [
-    kubernetes_namespace.argo_ns,
-    kubernetes_namespace.backend
+    kubernetes_namespace.argo_ns
+  ]
+}
+
+resource "helm_release" "istiod" {
+  name = "istiod"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart = "argocd-apps"
+  version = "2.0.2"
+  namespace = "argocd"
+
+  values = [
+    file("../values/local/argocd/argocd_apps_istiod_values.yaml")
+  ]
+
+  depends_on = [
+    helm_release.argo-cd,
+    kubernetes_manifest.argocd-github-access,
+    kubernetes_namespace.istio-system,
+  ]
+}
+
+resource "helm_release" "istio-gateway" {
+  name = "istio-gateway"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart = "argocd-apps"
+  version = "2.0.2"
+  namespace = "argocd"
+
+  values = [
+    file("../values/local/argocd/argocd_apps_istio_gateway_values.yaml")
+  ]
+
+  depends_on = [
+    helm_release.istiod,
   ]
 }
 
@@ -65,5 +117,7 @@ resource "helm_release" "argocd-apps" {
     helm_release.argo-cd,
     kubernetes_manifest.argocd-github-access,
     null_resource.middleware,
+    helm_release.istiod,
+    kubernetes_namespace.backend,
   ]
 }
