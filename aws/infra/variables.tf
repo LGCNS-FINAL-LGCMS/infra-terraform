@@ -87,3 +87,8 @@ variable "cache_node_type" {
   description = "Cache Node Type"
   type        = string
 }
+
+variable "bastion_keypair_path" {
+  description = "Bastion host keypair path"
+  type        = string
+}
