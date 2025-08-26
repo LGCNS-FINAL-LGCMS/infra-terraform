@@ -49,8 +49,13 @@ variable "kafka_ebs_mount_point" {
 }
 
 variable "jenkins_instance_type" {
-  description = "EC2 bastion server instance type"
+  description = "EC2 jenkins server instance type"
   type        = string
+}
+
+variable "jenkins_ebs_mount_point" {
+  description = "EC2 jenkins server ebs mount point"
+  type = string
 }
 
 variable "key_name" {

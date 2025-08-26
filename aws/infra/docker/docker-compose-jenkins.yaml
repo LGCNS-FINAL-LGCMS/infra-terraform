@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  jenkins:
+    container_name: jenkins-lgcms
+    image: jenkins/jenkins:2.516.2-lts-jdk21
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - ${mount_point}/jenkins_home:/var/jenkins_home
+      - ${mount_point}/jenkins_logs:/var/log/jenkins
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    user: "1000:999"
+    restart: unless-stopped

@@ -15,27 +15,3 @@ resource "aws_instance" "bastion" {
     Name = "${var.environment}-bastion"
   }
 }
-
-resource "aws_instance" "jenkins" {
-  ami = var.ubuntu_ami_id
-  instance_type = var.jenkins_instance_type
-  key_name = var.key_name
-  subnet_id = aws_subnet.private[0].id
-  vpc_security_group_ids = [aws_security_group.app.id]
-
-  root_block_device {
-    volume_size = 50
-    volume_type = "gp3"
-    encrypted = true
-  }
-
-  user_data = <<-EOF
-              #! /bin/bash
-              apt-get update
-              touch /hello-jenkins
-              EOF
-
-  tags = {
-    Name = "${var.environment}-jenkins"
-  }
-}
