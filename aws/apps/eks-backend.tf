@@ -21,7 +21,7 @@ locals {
     "backend-auth" = {
       repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
       chart          = "spring-chart",
-      targetRevision = "0.0.6",
+      targetRevision = var.backend_auth_chart_version,
       external_services = [
         {
           name         = "valkey-auth-external-service"
@@ -34,7 +34,7 @@ locals {
     "backend-member" = {
       repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
       chart          = "spring-chart",
-      targetRevision = "0.0.6",
+      targetRevision = var.backend_member_chart_version,
       external_services = [
         {
           name         = "postgres-member-external-service"
@@ -53,7 +53,7 @@ locals {
     "backend-lecture" = {
       repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
       chart          = "spring-chart",
-      targetRevision = "0.0.6",
+      targetRevision = var.backend_lecture_chart_version,
       external_services = [
         {
           name         = "postgres-lecture-external-service"
@@ -66,7 +66,7 @@ locals {
     "backend-core" = {
       repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
       chart          = "spring-chart",
-      targetRevision = "0.0.6",
+      targetRevision = var.backend_core_chart_version,
       external_services = [
         {
           name         = "postgres-core-external-service"
@@ -85,7 +85,7 @@ locals {
     "backend-guide" = {
       repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
       chart          = "spring-chart",
-      targetRevision = "0.0.6",
+      targetRevision = var.backend_guide_chart_version,
       external_services = [
         {
           name         = "postgres-guide-external-service"
@@ -98,7 +98,7 @@ locals {
     "backend-lesson" = {
       repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
       chart          = "spring-chart",
-      targetRevision = "0.0.6",
+      targetRevision = var.backend_lesson_chart_version,
       external_services = [
         {
           name         = "postgres-lesson-external-service"
