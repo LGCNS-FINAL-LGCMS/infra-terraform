@@ -32,6 +32,14 @@ module "eks" {
       type                          = "ingress"
       source_cluster_security_group = true
     }
+    kafka_egress = {
+      desciption                    = "Kafka egress"
+      protocol                      = "tcp"
+      from_port                     = 9094
+      to_port                       = 9094
+      type                          = "egress"
+      source_cluster_security_group = true
+    }
   }
 
   enable_irsa = true
@@ -88,4 +96,3 @@ module "eks" {
     Name = "${var.environment}-eks-cluster"
   }
 }
-
