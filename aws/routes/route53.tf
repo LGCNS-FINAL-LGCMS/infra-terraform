@@ -15,7 +15,7 @@ data "aws_route53_zone" "dns" {
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.dns.zone_id
-  name = "www.${var.domain_name}"
+  name    = "www.${var.domain_name}"
   type    = "A"
 
   alias {
@@ -49,3 +49,16 @@ resource "aws_route53_record" "argo" {
     evaluate_target_health = true
   }
 }
+
+resource "aws_route53_record" "jenkins" {
+  zone_id = data.aws_route53_zone.dns.zone_id
+  name    = "jenkins.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = data.aws_lb.alb.dns_name
+    zone_id                = data.aws_lb.alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
