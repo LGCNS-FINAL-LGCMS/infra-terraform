@@ -8,3 +8,5 @@ crash.log
 *.tfvars
 override.tf
 override.tf.json
+
+.kubeconfig
