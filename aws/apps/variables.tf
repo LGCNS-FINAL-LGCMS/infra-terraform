@@ -52,3 +52,8 @@ variable "backend_lesson_chart_version" {
   description = "backend lesson server chart version"
   type        = string
 }
+
+variable "frontend_chart_version" {
+  description = "frontend server chart version"
+  type        = string
+}
