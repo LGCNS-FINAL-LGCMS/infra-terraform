@@ -19,7 +19,7 @@ resource "aws_elasticache_replication_group" "main" {
   security_group_ids = [aws_security_group.elasticache.id]
 
   at_rest_encryption_enabled = true
-  transit_encryption_enabled = true
+  transit_encryption_enabled = false
 
   tags = {
     Name = "${var.environment}-valkey"
