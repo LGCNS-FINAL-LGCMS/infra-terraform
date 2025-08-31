@@ -15,18 +15,18 @@ systemctl start docker
 systemctl enable docker
 
 DEVICE=""
-for i in {1..120}; do
+for i in {1..600}; do
   if [ -b /dev/nvme1n1 ]; then
     DEVICE="/dev/nvme1n1"
     echo "Found EBS DEVICE : $DEVICE"
     break
   fi
   sleep 5
-  echo "Waiting for EBS device... ($i/120)"
+  echo "Waiting for EBS device... ($i/600)"
 done
 
 if [ -z "$DEVICE" ]; then
-  echo "ERROR: 10분이 경과했지만 EBS를 찾을 수 없음"
+  echo "ERROR: 50분이 경과했지만 EBS를 찾을 수 없음"
   exit 1
 fi
 
