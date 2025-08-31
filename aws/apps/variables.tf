@@ -57,3 +57,8 @@ variable "frontend_chart_version" {
   description = "frontend server chart version"
   type        = string
 }
+
+variable "kafka_ec2_port" {
+  description = "kafka ec2 port"
+  type        = number
+}

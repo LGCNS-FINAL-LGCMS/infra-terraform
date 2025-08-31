@@ -80,6 +80,13 @@ locals {
           externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
           externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
         },
+        {
+          name         = "kafka-external-service"
+          internalPort = 9094
+          externalIp   = data.terraform_remote_state.infra.outputs.kafka_private_ip
+          externalPort = var.kafka_ec2_port
+          type         = "ClusterIP"
+        },
       ]
     },
     "backend-guide" = {

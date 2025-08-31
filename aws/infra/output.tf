@@ -71,3 +71,7 @@ output "oidc_provider_arn" {
 output "public_subnet_ids" {
   value = aws_subnet.public[*].id
 }
+
+output "kafka_private_ip" {
+  value = aws_instance.kafka.private_ip
+}
