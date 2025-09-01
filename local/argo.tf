@@ -12,25 +12,6 @@ resource "kubernetes_namespace" "argo_ns" {
   }
 }
 
-resource "kubernetes_namespace" "backend" {
-  metadata {
-    annotations = {
-      name = "backend"
-    }
-
-    labels = {
-      "argocd.argoproj.io/managed-by" = "argocd",
-      "istio-injection" = "enabled"
-    }
-
-    name = "backend"
-  }
-
-  depends_on = [
-    helm_release.istiod
-  ]
-}
-
 resource "kubernetes_namespace" "istio-system" {
   metadata {
     annotations = {
@@ -99,25 +80,5 @@ resource "helm_release" "istio-gateway" {
 
   depends_on = [
     helm_release.istiod,
-  ]
-}
-
-resource "helm_release" "argocd-apps" {
-  name = "argocd-apps"
-  repository = "https://argoproj.github.io/argo-helm"
-  chart = "argocd-apps"
-  version = "2.0.2"
-  namespace = "argocd"
-
-  values = [
-    file("../values/local/argocd/argocd_apps_values.yaml")
-  ]
-
-  depends_on = [
-    helm_release.argo-cd,
-    kubernetes_manifest.argocd-github-access,
-    null_resource.middleware,
-    helm_release.istiod,
-    kubernetes_namespace.backend,
   ]
 }
