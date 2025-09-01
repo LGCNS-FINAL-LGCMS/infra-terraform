@@ -6,7 +6,9 @@ resource "kubernetes_namespace" "backend" {
 
     labels = {
       "argocd.argoproj.io/managed-by" = "argocd",
-      "istio-injection" = "enabled"
+      "sidecar.istio.io/proxyCPU"     = "50m"
+      "sidecar.istio.io/proxyMemory"  = "64Mi"
+      "istio-injection"               = "enabled"
     }
 
     name = "backend"
@@ -226,9 +228,9 @@ locals {
           targetRevision = app_config.targetRevision
           helm = {
             valueFiles = [
-              "$values/aws/${app_name}/configmap.yaml",
-              "$values/aws/${app_name}/secret.yaml",
-              "$values/aws/${app_name}/values.yaml"
+              "$values/local/${app_name}/configmap.yaml",
+              "$values/local/${app_name}/secret.yaml",
+              "$values/local/${app_name}/values.yaml"
             ]
             valuesObject = {
               externalService = app_config.external_services
@@ -279,5 +281,6 @@ resource "helm_release" "backend_applications" {
     null_resource.middleware,
     helm_release.istiod,
     kubernetes_namespace.backend,
+    helm_release.metrics_server
   ]
 }
