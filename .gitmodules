@@ -1,3 +1,6 @@
 [submodule "values"]
 	path = values
 	url = https://github.com/LGCNS-FINAL-LGCMS/infra-helm-values.git
+[submodule "database"]
+	path = database
+	url = https://github.com/LGCNS-FINAL-LGCMS/database-sql.git

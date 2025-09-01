@@ -33,6 +33,13 @@ resource "aws_security_group" "kafka" {
   }
 
   ingress {
+    from_port = 9094
+    to_port   = 9094
+    protocol  = "tcp"
+    security_groups = [module.eks.node_security_group_id]
+  }
+
+  ingress {
     from_port = 22
     to_port   = 22
     protocol  = "tcp"

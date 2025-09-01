@@ -52,3 +52,43 @@ variable "backend_lesson_chart_version" {
   description = "backend lesson server chart version"
   type        = string
 }
+
+variable "backend_upload_chart_version" {
+  description = "backend upload server chart version"
+  type        = string
+}
+
+variable "backend_consulting_chart_version" {
+  description = "backend consulting server chart version"
+  type        = string
+}
+
+variable "backend_leveltest_chart_version" {
+  description = "backend leveltest server chart version"
+  type        = string
+}
+
+variable "backend_payment_chart_version" {
+  description = "backend payment server chart version"
+  type        = string
+}
+
+variable "backend_streaming_chart_version" {
+  description = "backend streaming server chart version"
+  type        = string
+}
+
+variable "backend_notification_chart_version" {
+  description = "backend notification server chart version"
+  type        = string
+}
+
+variable "frontend_chart_version" {
+  description = "frontend server chart version"
+  type        = string
+}
+
+variable "kafka_ec2_port" {
+  description = "kafka ec2 port"
+  type        = number
+}

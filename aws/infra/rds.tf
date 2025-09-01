@@ -41,9 +41,154 @@ resource "aws_db_instance" "main" {
 resource "null_resource" "init_rds_schema" {
   depends_on = [aws_instance.bastion, aws_db_instance.main]
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir /tmp/sql",
+    ]
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
   provisioner "file" {
-    source      = "init-sql/init.sql"
-    destination = "/tmp/init.sql"
+    source      = "../../database/init-sql/common/01-init.sql"
+    destination = "/tmp/sql/01-init.sql"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/auth/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/consulting/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/core/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/guide/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/lecture/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/lesson/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/leveltest/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/member/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/notification/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/payment/"
+    destination = "/tmp/sql/"
+
+    connection {
+      type = "ssh"
+      host = aws_eip.bastion.public_ip
+      user = "ubuntu"
+      private_key = file(var.bastion_keypair_path)
+    }
+  }
+
+  provisioner "file" {
+    source      = "../../database/init-sql/database/tutor/"
+    destination = "/tmp/sql/"
 
     connection {
       type = "ssh"
@@ -57,8 +202,7 @@ resource "null_resource" "init_rds_schema" {
     inline = [
       "sudo apt-get update -y",
       "sudo apt-get install -y postgresql-client",
-      # "export PGPASSWORD='${var.db_password}'",
-      "PGPASSWORD=${var.db_password} psql -h ${aws_db_instance.main.address} -p ${aws_db_instance.main.port} -U ${var.db_username} -f /tmp/init.sql"
+      "for sql_file in $(find /tmp/sql -name '*.sql' | sort -V); do echo \"Executing $sql_file...\"; PGPASSWORD=${var.db_password} psql -h ${aws_db_instance.main.address} -p ${aws_db_instance.main.port} -U ${var.db_username} -f \"$sql_file\"; done"
     ]
 
     connection {

@@ -80,6 +80,13 @@ locals {
           externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
           externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
         },
+        {
+          name         = "kafka-external-service"
+          internalPort = 9094
+          externalIp   = data.terraform_remote_state.infra.outputs.kafka_private_ip
+          externalPort = var.kafka_ec2_port
+          type         = "ClusterIP"
+        },
       ]
     },
     "backend-guide" = {
@@ -105,6 +112,88 @@ locals {
           internalPort = 5432
           externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
           externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+        },
+      ]
+    },
+    "backend-upload" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_upload_chart_version,
+      external_services = []
+    },
+    "backend-consulting" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_consulting_chart_version,
+      external_services = [
+        {
+          name         = "postgres-consulting-external-service"
+          internalPort = 5432
+          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+        },
+        {
+          name         = "valkey-consulting-external-service"
+          internalPort = 6379
+          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+        },
+      ]
+    },
+    "backend-leveltest" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_leveltest_chart_version,
+      external_services = [
+        {
+          name         = "postgres-leveltest-external-service"
+          internalPort = 5432
+          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+        },
+        {
+          name         = "valkey-leveltest-external-service"
+          internalPort = 6379
+          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+        },
+      ]
+    },
+    "backend-payment" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_payment_chart_version,
+      external_services = [
+        {
+          name         = "postgres-payment-external-service"
+          internalPort = 5432
+          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+        },
+      ]
+    },
+    "backend-streaming" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_streaming_chart_version,
+      external_services = []
+    },
+    "backend-notification" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_notification_chart_version,
+      external_services = [
+        {
+          name         = "postgres-notification-external-service"
+          internalPort = 5432
+          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+        },
+        {
+          name         = "valkey-notification-external-service"
+          internalPort = 6379
+          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
         },
       ]
     },

@@ -42,4 +42,5 @@ resource "aws_volume_attachment" "jenkins_attach" {
   instance_id  = aws_instance.jenkins.id
   volume_id    = data.aws_ebs_volume.jenkins_data.id
   force_detach = true
+  skip_destroy = false
 }

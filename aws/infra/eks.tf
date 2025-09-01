@@ -73,7 +73,7 @@ module "eks" {
       instance_types = var.eks_instance_types
 
       min_size     = 1
-      max_size     = 1
+      max_size     = 3
       desired_size = 1
 
       disk_size = 20

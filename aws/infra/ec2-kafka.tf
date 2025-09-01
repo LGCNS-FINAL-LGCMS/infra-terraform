@@ -42,4 +42,5 @@ resource "aws_volume_attachment" "kafka_attach" {
   instance_id  = aws_instance.kafka.id
   volume_id    = data.aws_ebs_volume.kafka_data.id
   force_detach = true
+  skip_destroy = false
 }

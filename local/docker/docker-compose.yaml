@@ -11,7 +11,29 @@ services:
       - POSTGRES_USER=lgcms
       - POSTGRES_PASSWORD=1234
     volumes:
-      - ./init-sql:/docker-entrypoint-initdb.d
+      - ../../database/init-sql/common/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ../../database/init-sql/database/auth/02-auth-schema.sql:/docker-entrypoint-initdb.d/02-auth-schema.sql
+      - ../../database/init-sql/database/auth/03-auth-data.sql:/docker-entrypoint-initdb.d/03-auth-data.sql
+      - ../../database/init-sql/database/consulting/02-consulting-schema.sql:/docker-entrypoint-initdb.d/02-consulting-schema.sql
+      - ../../database/init-sql/database/consulting/03-consulting-data.sql:/docker-entrypoint-initdb.d/03-consulting-data.sql
+      - ../../database/init-sql/database/core/02-core-schema.sql:/docker-entrypoint-initdb.d/02-core-schema.sql
+      - ../../database/init-sql/database/core/03-core-data.sql:/docker-entrypoint-initdb.d/03-core-data.sql
+      - ../../database/init-sql/database/guide/02-guide-schema.sql:/docker-entrypoint-initdb.d/02-guide-schema.sql
+      - ../../database/init-sql/database/guide/03-guide-data.sql:/docker-entrypoint-initdb.d/03-guide-data.sql
+      - ../../database/init-sql/database/lecture/02-lecture-schema.sql:/docker-entrypoint-initdb.d/02-lecture-schema.sql
+      - ../../database/init-sql/database/lecture/03-lecture-data.sql:/docker-entrypoint-initdb.d/03-lecture-data.sql
+      - ../../database/init-sql/database/lesson/02-lesson-schema.sql:/docker-entrypoint-initdb.d/02-lesson-schema.sql
+      - ../../database/init-sql/database/lesson/03-lesson-data.sql:/docker-entrypoint-initdb.d/03-lesson-data.sql
+      - ../../database/init-sql/database/leveltest/02-leveltest-schema.sql:/docker-entrypoint-initdb.d/02-leveltest-schema.sql
+      - ../../database/init-sql/database/leveltest/03-leveltest-data.sql:/docker-entrypoint-initdb.d/03-leveltest-data.sql
+      - ../../database/init-sql/database/member/02-member-schema.sql:/docker-entrypoint-initdb.d/02-member-schema.sql
+      - ../../database/init-sql/database/member/03-member-data.sql:/docker-entrypoint-initdb.d/03-member-data.sql
+      - ../../database/init-sql/database/notification/02-notification-schema.sql:/docker-entrypoint-initdb.d/02-notification-schema.sql
+      - ../../database/init-sql/database/notification/03-notification-data.sql:/docker-entrypoint-initdb.d/03-notification-data.sql
+      - ../../database/init-sql/database/payment/02-payment-schema.sql:/docker-entrypoint-initdb.d/02-payment-schema.sql
+      - ../../database/init-sql/database/payment/03-payment-data.sql:/docker-entrypoint-initdb.d/03-payment-data.sql
+      - ../../database/init-sql/database/tutor/02-tutor-schema.sql:/docker-entrypoint-initdb.d/02-tutor-schema.sql
+      - ../../database/init-sql/database/tutor/03-tutor-data.sql:/docker-entrypoint-initdb.d/03-tutor-data.sql
   redis:
     container_name: redis-lgcms-local
     image: valkey/valkey:alpine3.22
@@ -19,10 +41,10 @@ services:
       - 38122:6379
   kafka:
     container_name: kafka-lgcms-local
-    image: bitnami/kafka:4.0.0
+    image: bitnamilegacy/kafka:4.0.0-debian-12-r10
     ports:
-      - 38123:9094
       - 9092:9092
+      - 38123:9094
     environment:
       - KAFKA_CFG_NODE_ID=0
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
