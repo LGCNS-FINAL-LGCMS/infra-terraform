@@ -2,7 +2,7 @@ terraform {
   required_providers {
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.5"
+      version = "3.0.2"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -17,7 +17,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     config_path = "~/.kube/config"
     config_context = "docker-desktop"
   }

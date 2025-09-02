@@ -252,7 +252,10 @@ locals {
           prune    = true
           selfHeal = true
         }
-        syncOptions = ["CreateNamespace=true"]
+        syncOptions = [
+          "CreateNamespace=true",
+          "argocd.argoproj.io/sync-wave=1"
+        ]
       }
     }
   }
@@ -281,6 +284,7 @@ resource "helm_release" "backend_applications" {
     null_resource.middleware,
     helm_release.istiod,
     kubernetes_namespace.backend,
-    helm_release.metrics_server
+    helm_release.metrics_server,
+    helm_release.prometheus_grafana,
   ]
 }
