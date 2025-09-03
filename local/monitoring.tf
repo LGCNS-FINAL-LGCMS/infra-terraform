@@ -69,22 +69,67 @@ resource "helm_release" "prometheus_grafana" {
   ]
 }
 
-# resource "helm_release" "loki" {
-#   name = "loki"
-#   repository = "https://grafana.github.io/helm-charts"
-#   chart = "loki"
-#   version = "6.38.0"
-#   namespace = "monitoring"
-#
-#   values = [
-#     file("../values/local/monitoring/loki-values.yaml")
-#   ]
-#
-#   depends_on = [
-#     kubernetes_namespace.monitoring,
-#   ]
-# }
-#
+resource "helm_release" "loki" {
+  name       = "loki"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-apps"
+  version    = "2.0.2"
+  namespace  = "argocd"
+
+  atomic            = true
+  cleanup_on_fail   = true
+  dependency_update = true
+
+  values = [
+    yamlencode({
+      applications = {
+        loki = {
+          namespace = "argocd"
+          project   = "default"
+          sources = [
+            {
+              chart          = "loki"
+              repoURL        = "https://grafana.github.io/helm-charts"
+              targetRevision = "6.38.0"
+              helm = {
+                valueFiles = [
+                  "$values/local/monitoring/loki-values.yaml"
+                ]
+              }
+            },
+            {
+              repoURL        = "https://github.com/LGCNS-FINAL-LGCMS/infra-helm-values.git"
+              targetRevision = "main"
+              ref            = "values"
+            }
+          ]
+          destination = {
+            server    = "https://kubernetes.default.svc"
+            namespace = "monitoring"
+          }
+          syncPolicy = {
+            automated = {
+              prune    = true
+              selfHeal = true
+            }
+            syncOptions = [
+              "CreateNamespace=true",
+              "ServerSideApply=true",
+              "argocd.argoproj.io/sync-wave=0"
+            ]
+          }
+        }
+      }
+    })
+  ]
+
+  depends_on = [
+    helm_release.argo-cd,
+    kubernetes_manifest.argocd-github-access,
+    kubernetes_namespace.monitoring,
+  ]
+}
+
 # resource "helm_release" "tempo" {
 #   name = "tempo"
 #   repository = "https://grafana.github.io/helm-charts"
