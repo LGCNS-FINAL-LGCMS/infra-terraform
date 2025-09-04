@@ -67,6 +67,19 @@ resource "helm_release" "istiod" {
   ]
 }
 
+data "http" "istio_operator_crd" {
+  url = "https://raw.githubusercontent.com/istio/istio/release-1.20/manifests/charts/base/crds/crd-operator.yaml"
+}
+
+module "kube_prometheus_stack_crds" {
+  source = "rpadovani/helm-crds/kubectl"
+  version = "1.0.0"
+
+  crds_urls = [
+    "https://raw.githubusercontent.com/istio/istio/release-1.20/manifests/charts/base/crds/crd-operator.yaml",
+  ]
+}
+
 resource "helm_release" "istio-gateway" {
   name = "istio-gateway"
   repository = "https://argoproj.github.io/argo-helm"
@@ -80,5 +93,6 @@ resource "helm_release" "istio-gateway" {
 
   depends_on = [
     helm_release.istiod,
+    module.kube_prometheus_stack_crds,
   ]
 }
