@@ -313,22 +313,67 @@ resource "helm_release" "otel-collector" {
   ]
 }
 
-# resource "helm_release" "otel-collector" {
-#   name = "otel-collector"
-#   repository = "https://open-telemetry.github.io/opentelemetry-helm-charts"
-#   chart = "opentelemetry-collector"
-#   version = "0.132.0"
-#   namespace = "monitoring"
-#
-#   values = [
-#     file("../values/local/monitoring/otel-collector-values.yaml")
-#   ]
-#
-#   depends_on = [
-#     kubernetes_namespace.monitoring,
-#   ]
-# }
-#
+resource "helm_release" "kiali-server" {
+  name       = "kiali-server"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-apps"
+  version    = "2.0.2"
+  namespace  = "argocd"
+
+  atomic            = true
+  cleanup_on_fail   = true
+  dependency_update = true
+
+  values = [
+    yamlencode({
+      applications = {
+        kiali-server = {
+          namespace = "argocd"
+          project   = "default"
+          sources = [
+            {
+              chart          = "kiali-server"
+              repoURL        = "https://kiali.org/helm-charts"
+              targetRevision = "2.14.0"
+              helm = {
+                valueFiles = [
+                  "$values/local/monitoring/kiali-server-values.yaml"
+                ]
+              }
+            },
+            {
+              repoURL        = "https://github.com/LGCNS-FINAL-LGCMS/infra-helm-values.git"
+              targetRevision = "main"
+              ref            = "values"
+            }
+          ]
+          destination = {
+            server    = "https://kubernetes.default.svc"
+            namespace = "istio-system"
+          }
+          syncPolicy = {
+            automated = {
+              prune    = true
+              selfHeal = true
+            }
+            syncOptions = [
+              "CreateNamespace=true",
+              "ServerSideApply=true",
+              "argocd.argoproj.io/sync-wave=0"
+            ]
+          }
+        }
+      }
+    })
+  ]
+
+  depends_on = [
+    helm_release.argo-cd,
+    kubernetes_manifest.argocd-github-access,
+    kubernetes_namespace.monitoring,
+  ]
+}
+
 # resource "helm_release" "kiali-server" {
 #   name = "kiali-server"
 #   repository = "https://kiali.org/helm-charts"
