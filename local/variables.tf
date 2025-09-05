@@ -58,6 +58,11 @@ variable "backend_notification_chart_version" {
   type        = string
 }
 
+variable "backend_tutor_chart_version" {
+  description = "backend tutor server chart version"
+  type        = string
+}
+
 variable "my_ip" {
   description = "my nat ip address"
   type        = string

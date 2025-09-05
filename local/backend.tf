@@ -215,6 +215,27 @@ locals {
         },
       ]
     },
+    "backend-tutor" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_tutor_chart_version,
+      external_services = [
+        {
+          name         = "postgres-tutor-external-service"
+          internalPort = 5432
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
+        },
+        {
+          name         = "valkey-tutor-external-service"
+          internalPort = 6379
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
+        },
+      ]
+    },
   }
 
   applications = {

@@ -5,7 +5,8 @@ resource "kubernetes_namespace" "backend" {
     }
 
     labels = {
-      "argocd.argoproj.io/managed-by" = "argocd"
+      "argocd.argoproj.io/managed-by" = "argocd",
+      "istio-injection"               = "enabled"
     }
 
     name = "backend"
@@ -194,6 +195,27 @@ locals {
           internalPort = 6379
           externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
           externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+        },
+      ]
+    },
+    "backend-tutor" = {
+      repoURL        = "https://lgcns-final-lgcms.github.io/infra-helm-packages",
+      chart          = "spring-chart",
+      targetRevision = var.backend_tutor_chart_version,
+      external_services = [
+        {
+          name         = "postgres-tutor-external-service"
+          internalPort = 5432
+          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          type         = "ClusterIP"
+        },
+        {
+          name         = "valkey-tutor-external-service"
+          internalPort = 6379
+          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          type         = "ClusterIP"
         },
       ]
     },
