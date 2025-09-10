@@ -250,3 +250,44 @@ resource "kubernetes_ingress_v1" "monitoring_ingress" {
 
   depends_on = [helm_release.aws_alb_controller]
 }
+
+resource "kubernetes_ingress_v1" "airflow_ingress" {
+  metadata {
+    name      = "airflow-ingress"
+    namespace = "airflow"
+    annotations = {
+      "kubernetes.io/ingress.class"               = "alb"
+      "alb.ingress.kubernetes.io/scheme"          = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"     = "ip"
+      "alb.ingress.kubernetes.io/certificate-arn" = data.aws_acm_certificate.ssl_cert.arn
+      "alb.ingress.kubernetes.io/listen-ports"    = "[{\"HTTP\": 80}, {\"HTTPS\": 443}]"
+      "alb.ingress.kubernetes.io/ssl-redirect"    = "443"
+      "alb.ingress.kubernetes.io/group.name"      = "eks-alb-group"
+      "alb.ingress.kubernetes.io/subnets" = join(",", data.terraform_remote_state.infra.outputs.public_subnet_ids)
+    }
+  }
+
+  spec {
+    ingress_class_name = "alb"
+
+    rule {
+      host = "airflow.${var.domain_name}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "airflow-api-server"
+              port {
+                number = 8080
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  depends_on = [helm_release.aws_alb_controller]
+}
