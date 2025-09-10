@@ -8,21 +8,6 @@ output "bastion_public_ip" {
   value       = aws_eip.bastion.public_ip
 }
 
-output "jenkins_private_id" {
-  description = "Jenkins id"
-  value       = aws_instance.jenkins.id
-}
-
-output "jenkins_private_ip" {
-  description = "Jenkins host private ip"
-  value       = aws_instance.jenkins.private_ip
-}
-
-output "jenkins_security_group_id" {
-  description = "Jenkins security group id"
-  value       = aws_security_group.jenkins.id
-}
-
 output "cluster_endpoint" {
   description = "Endpoint for EKS control plane"
   value       = module.eks.cluster_endpoint

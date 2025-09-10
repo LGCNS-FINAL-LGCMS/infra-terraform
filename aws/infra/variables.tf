@@ -48,16 +48,6 @@ variable "kafka_ebs_mount_point" {
   type = string
 }
 
-variable "jenkins_instance_type" {
-  description = "EC2 jenkins server instance type"
-  type        = string
-}
-
-variable "jenkins_ebs_mount_point" {
-  description = "EC2 jenkins server ebs mount point"
-  type = string
-}
-
 variable "key_name" {
   description = "Ket pair name for EC2 instances"
   type        = string

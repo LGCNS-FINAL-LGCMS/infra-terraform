@@ -8,16 +8,6 @@ variable "aws_profile" {
   type        = string
 }
 
-variable "jenkins_az" {
-  description = "Jenkins Availability zone"
-  type        = string
-}
-
-variable "jenkins_ebs_size" {
-  description = "Jenkins EBS size"
-  type        = string
-}
-
 variable "kafka_az" {
   description = "Kafka Availability zone"
   type        = string
