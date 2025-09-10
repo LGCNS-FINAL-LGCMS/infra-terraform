@@ -127,6 +127,24 @@ resource "kubernetes_ingress_v1" "istio_ingress" {
         }
       }
     }
+
+    rule {
+      host = "kiali.${var.domain_name}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "kiali"
+              port {
+                number = 20001
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   depends_on = [helm_release.aws_alb_controller]
@@ -163,6 +181,65 @@ resource "kubernetes_ingress_v1" "argocd_ingress" {
               name = "argo-cd-argocd-server"
               port {
                 number = 443
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  depends_on = [helm_release.aws_alb_controller]
+}
+
+resource "kubernetes_ingress_v1" "monitoring_ingress" {
+  metadata {
+    name      = "monitoring-ingress"
+    namespace = "monitoring"
+    annotations = {
+      "kubernetes.io/ingress.class"               = "alb"
+      "alb.ingress.kubernetes.io/scheme"          = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"     = "ip"
+      "alb.ingress.kubernetes.io/certificate-arn" = data.aws_acm_certificate.ssl_cert.arn
+      "alb.ingress.kubernetes.io/listen-ports"    = "[{\"HTTP\": 80}, {\"HTTPS\": 443}]"
+      "alb.ingress.kubernetes.io/ssl-redirect"    = "443"
+      "alb.ingress.kubernetes.io/group.name"      = "eks-alb-group"
+      "alb.ingress.kubernetes.io/subnets" = join(",", data.terraform_remote_state.infra.outputs.public_subnet_ids)
+    }
+  }
+
+  spec {
+    ingress_class_name = "alb"
+
+    rule {
+      host = "grafana.${var.domain_name}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "prometheus-grafana"
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+      }
+    }
+
+    rule {
+      host = "prometheus.${var.domain_name}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "prometheus-grafana-kube-pr-prometheus"
+              port {
+                number = 9090
               }
             }
           }
