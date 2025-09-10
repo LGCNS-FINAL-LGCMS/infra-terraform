@@ -101,6 +101,12 @@ locals {
           externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
           externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
         },
+        {
+          name         = "valkey-guide-external-service"
+          internalPort = 6379
+          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+        },
       ]
     },
     "backend-lesson" = {
@@ -170,6 +176,12 @@ locals {
           internalPort = 5432
           externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
           externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+        },
+        {
+          name         = "valkey-payment-external-service"
+          internalPort = 6379
+          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
+          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
         },
       ]
     },

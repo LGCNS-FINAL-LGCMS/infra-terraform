@@ -110,6 +110,13 @@ locals {
           externalPort = var.postgres_port
           type         = "ClusterIP"
         },
+        {
+          name         = "valkey-guide-external-service"
+          internalPort = 6379
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
+        },
       ]
     },
     "backend-lesson" = {
@@ -184,6 +191,13 @@ locals {
           internalPort = 5432
           externalIp   = var.my_ip
           externalPort = var.postgres_port
+          type         = "ClusterIP"
+        },
+        {
+          name         = "postgres-payment-external-service"
+          internalPort = 6379
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
           type         = "ClusterIP"
         },
       ]
