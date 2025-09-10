@@ -40,6 +40,14 @@ module "eks" {
       type                          = "egress"
       source_cluster_security_group = true
     }
+    metrics_server = {
+      desciption                    = "Metrics server"
+      protocol                      = "tcp"
+      from_port                     = 10251
+      to_port                       = 10251
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
   }
 
   enable_irsa = true
@@ -54,6 +62,9 @@ module "eks" {
     vpc-cni = {
       most_recent    = true
       before_compute = true
+    }
+    metrics-server = {
+      most_recent = true
     }
     aws-ebs-csi-driver = {
       most_recent              = true
