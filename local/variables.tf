@@ -1,28 +1,3 @@
-variable "environment" {
-  description = "environment"
-  type        = string
-}
-
-variable "aws_profile" {
-  description = "AWS profile name"
-  type        = string
-}
-
-variable "domain_name" {
-  description = "DNS domain name"
-  type        = string
-}
-
-variable "acm_domain_name" {
-  description = "ACM domain name"
-  type        = string
-}
-
-variable "aws_region" {
-  description = "AWS EKS Region"
-  type        = string
-}
-
 variable "backend_auth_chart_version" {
   description = "backend auth server chart version"
   type        = string
@@ -88,12 +63,22 @@ variable "backend_tutor_chart_version" {
   type        = string
 }
 
-variable "frontend_chart_version" {
-  description = "frontend server chart version"
+variable "my_ip" {
+  description = "my nat ip address"
   type        = string
 }
 
-variable "kafka_ec2_port" {
-  description = "kafka ec2 port"
+variable "postgres_port" {
+  description = "postgres port"
+  type        = number
+}
+
+variable "valkey_port" {
+  description = "kafka port"
+  type        = number
+}
+
+variable "kafka_port" {
+  description = "kafka port"
   type        = number
 }

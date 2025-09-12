@@ -8,13 +8,43 @@ variable "aws_profile" {
   type        = string
 }
 
-variable "jenkins_az" {
-  description = "Jenkins Availability zone"
+variable "prometheus_az" {
+  description = "Prometheus Availability zone"
   type        = string
 }
 
-variable "jenkins_ebs_size" {
-  description = "Jenkins EBS size"
+variable "prometheus_ebs_size" {
+  description = "Prometheus EBS size"
+  type        = string
+}
+
+variable "grafana_az" {
+  description = "Grafana Availability zone"
+  type        = string
+}
+
+variable "grafana_ebs_size" {
+  description = "Grafana EBS size"
+  type        = string
+}
+
+variable "loki_az" {
+  description = "Loki Availability zone"
+  type        = string
+}
+
+variable "loki_ebs_size" {
+  description = "Loki EBS size"
+  type        = string
+}
+
+variable "tempo_az" {
+  description = "Tempo Availability zone"
+  type        = string
+}
+
+variable "tempo_ebs_size" {
+  description = "Tempo EBS size"
   type        = string
 }
 

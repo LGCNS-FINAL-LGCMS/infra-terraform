@@ -19,7 +19,6 @@ resource "aws_route53_record" "www" {
   type    = "A"
 
   alias {
-    # name                   =
     name                   = data.aws_lb.alb.dns_name
     zone_id                = data.aws_lb.alb.zone_id
     evaluate_target_health = true
@@ -50,9 +49,9 @@ resource "aws_route53_record" "argo" {
   }
 }
 
-resource "aws_route53_record" "jenkins" {
+resource "aws_route53_record" "grafana" {
   zone_id = data.aws_route53_zone.dns.zone_id
-  name    = "jenkins.${var.domain_name}"
+  name    = "grafana.${var.domain_name}"
   type    = "A"
 
   alias {
@@ -62,3 +61,38 @@ resource "aws_route53_record" "jenkins" {
   }
 }
 
+resource "aws_route53_record" "prometheus" {
+  zone_id = data.aws_route53_zone.dns.zone_id
+  name    = "prometheus.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = data.aws_lb.alb.dns_name
+    zone_id                = data.aws_lb.alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "kiali" {
+  zone_id = data.aws_route53_zone.dns.zone_id
+  name    = "kiali.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = data.aws_lb.alb.dns_name
+    zone_id                = data.aws_lb.alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "airflow" {
+  zone_id = data.aws_route53_zone.dns.zone_id
+  name    = "airflow.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = data.aws_lb.alb.dns_name
+    zone_id                = data.aws_lb.alb.zone_id
+    evaluate_target_health = true
+  }
+}

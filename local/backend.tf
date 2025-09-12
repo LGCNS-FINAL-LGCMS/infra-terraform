@@ -6,6 +6,8 @@ resource "kubernetes_namespace" "backend" {
 
     labels = {
       "argocd.argoproj.io/managed-by" = "argocd",
+      "sidecar.istio.io/proxyCPU"     = "50m"
+      "sidecar.istio.io/proxyMemory"  = "64Mi"
       "istio-injection"               = "enabled"
     }
 
@@ -27,8 +29,9 @@ locals {
         {
           name         = "valkey-auth-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         }
       ]
     },
@@ -40,14 +43,16 @@ locals {
         {
           name         = "postgres-member-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
           name         = "valkey-member-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -59,8 +64,9 @@ locals {
         {
           name         = "postgres-lecture-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -72,20 +78,22 @@ locals {
         {
           name         = "postgres-core-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
           name         = "valkey-core-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
         {
           name         = "kafka-external-service"
           internalPort = 9094
-          externalIp   = data.terraform_remote_state.infra.outputs.kafka_private_ip
-          externalPort = var.kafka_ec2_port
+          externalIp   = var.my_ip
+          externalPort = var.kafka_port
           type         = "ClusterIP"
         },
       ]
@@ -98,14 +106,16 @@ locals {
         {
           name         = "postgres-guide-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
           name         = "valkey-guide-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -117,8 +127,9 @@ locals {
         {
           name         = "postgres-lesson-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -136,14 +147,16 @@ locals {
         {
           name         = "postgres-consulting-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
           name         = "valkey-consulting-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -155,14 +168,16 @@ locals {
         {
           name         = "postgres-leveltest-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
           name         = "valkey-leveltest-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -174,14 +189,16 @@ locals {
         {
           name         = "postgres-payment-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
-          name         = "valkey-payment-external-service"
+          name         = "postgres-payment-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -199,14 +216,16 @@ locals {
         {
           name         = "postgres-notification-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
+          type         = "ClusterIP"
         },
         {
           name         = "valkey-notification-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
+          type         = "ClusterIP"
         },
       ]
     },
@@ -218,15 +237,15 @@ locals {
         {
           name         = "postgres-tutor-external-service"
           internalPort = 5432
-          externalName = data.terraform_remote_state.infra.outputs.aws_db_instance_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_db_instance_main_port
+          externalIp   = var.my_ip
+          externalPort = var.postgres_port
           type         = "ClusterIP"
         },
         {
           name         = "valkey-tutor-external-service"
           internalPort = 6379
-          externalName = data.terraform_remote_state.infra.outputs.aws_cache_main_address
-          externalPort = data.terraform_remote_state.infra.outputs.aws_cache_main_port
+          externalIp   = var.my_ip
+          externalPort = var.valkey_port
           type         = "ClusterIP"
         },
       ]
@@ -244,9 +263,9 @@ locals {
           targetRevision = app_config.targetRevision
           helm = {
             valueFiles = [
-              "$values/aws/${app_name}/configmap.yaml",
-              "$values/aws/${app_name}/secret.yaml",
-              "$values/aws/${app_name}/values.yaml"
+              "$values/local/${app_name}/configmap.yaml",
+              "$values/local/${app_name}/secret.yaml",
+              "$values/local/${app_name}/values.yaml"
             ]
             valuesObject = {
               externalService = app_config.external_services
@@ -268,7 +287,10 @@ locals {
           prune    = true
           selfHeal = true
         }
-        syncOptions = ["CreateNamespace=true"]
+        syncOptions = [
+          "CreateNamespace=true",
+          "argocd.argoproj.io/sync-wave=1"
+        ]
       }
     }
   }
@@ -294,7 +316,10 @@ resource "helm_release" "backend_applications" {
   depends_on = [
     helm_release.argo-cd,
     kubernetes_manifest.argocd-github-access,
+    null_resource.middleware,
     helm_release.istiod,
     kubernetes_namespace.backend,
+    helm_release.metrics_server,
+    helm_release.prometheus_grafana,
   ]
 }

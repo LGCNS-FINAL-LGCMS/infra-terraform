@@ -42,6 +42,16 @@ data "terraform_remote_state" "infra" {
   }
 }
 
+data "terraform_remote_state" "infra-ebs" {
+  backend = "s3"
+  config = {
+    bucket  = "lgcms-terraform-state-bucket"
+    key     = "infra-ebs/terraform.tfstate"
+    region  = "ap-northeast-2"
+    profile = var.aws_profile
+  }
+}
+
 data "aws_eks_cluster" "eks" {
   name = data.terraform_remote_state.infra.outputs.aws_eks_cluster_main_name
 }
